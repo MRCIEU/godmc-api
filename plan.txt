@@ -1,0 +1,138 @@
+Problems with db
+
+gene chromosomes are all 0
+cpg table is wrong
+
+
+import PySQLPool
+
+
+CENTRAL_DB = "./conf_files/central.json"
+
+with open(MYSQL_DB) as f:
+	mrbase_config = json.load(f)
+dbConnection = PySQLPool.getNewConnection(**mrbase_config)
+
+
+SQL   = """SELECT a.effect_allele, a.other_allele, a.effect_allele_freq, a.beta, a.se, a.p, a.n, b.name, c.*
+	# 	FROM assoc a, snp b, study c
+	# 	WHERE a.snp=b.id AND a.study=c.id
+	# 	AND {0}
+	# 	AND a.study IN ({1})
+	# 	AND b.name IN ({2})
+	# 	ORDER BY a.study;""".format(access_query, outcomes, snps)
+
+query.Query(SQL)
+
+
+import functions
+reload(functions)
+dbConnection = functions.get_connection("db.conf")
+
+functions.get_snpid_from_rsid(["rs6602381", "rs72828459"], dbConnection)
+functions.query_snp_rsids(["rs6602381", "rs72828459"], dbConnection)
+functions.query_snp_name(["chr10:100003302:SNP", "chr10:10000018:SNP"], dbConnection)
+functions.query_snp_chrpos(["10:100003302", "10:10000018"], dbConnection)
+functions.query_snp_range("1:100000000-100001000", dbConnection)
+
+functions.query_assocmeta_cpgid(["cg00000029"], dbConnection, "snp, cpg, pval", 1e-30)
+functions.query_assocmeta_snpid(["chr10:100003302:SNP", "chr10:10000018:SNP"], dbConnection, "pval")
+
+functions.query_assocmeta_rsid(["rs6602381", "rs72828459"], dbConnection, "pval")
+functions.query_assocmeta_gene_snp("A1BG", dbConnection)
+
+
+rsid=["rs6602381", "rs72828459"]
+
+
+chrpos = ["1:100003301", "10:100003302", "10:10000018", "2:10000330"]
+
+mysql -u root -pqnwNQ6wBW -h shark.epi.bris.ac.uk -P 9306
+
+/godmc/api/v0.1/snps
+/godmc/api/v0.1/snps/rsid/<str:rsid>
+/godmc/api/v0.1/snps/chrpos/<str:chrpos>
+
+/godmc/api/v0.1/cpgs
+/godmc/api/v0.1/cpgs/cpgid/<str:cpgid>
+/godmc/api/v0.1/cpgs/chrpos/<str:chrpos>
+
+/godmc/api/v0.1/genes
+/godmc/api/v0.1/genes/entrez/<str:entrez>
+/godmc/api/v0.1/genes/chrpos/<str:chrpos>
+
+/godmc/api/v0.1/assoc/meta
+/godmc/api/v0.1/assoc/meta/cpg/<str:cpgid>
+/godmc/api/v0.1/assoc/meta/gene/<str:cpgid>
+
+/godmc/api/v0.1/assoc/meta
+/godmc/api/v0.1/assoc/meta/cpg/<str:cpgid>
+/godmc/api/v0.1/assoc/meta/gene/<str:entrez>
+/godmc/api/v0.1/assoc/meta/snp/<str:rsid>
+
+
+
+class SnpListInfo(Resource):
+    def get(self):
+        pass
+
+class SnpChrposInfo(Resource):
+    def get(self):
+        pass
+
+class SnpRsidInfo(Resource):
+    def get(self):
+        pass
+
+class CpgListInfo(Resource):
+    def get(self):
+        pass
+
+class CpgChrposInfo(Resource):
+    def get(self):
+        pass
+
+class CpgCpgidInfo(Resource):
+    def get(self):
+        pass
+
+class GeneListInfo(Resource):
+    def get(self):
+        pass
+
+class GeneChrposInfo(Resource):
+    def get(self):
+        pass
+
+class GeneEntrezInfo(Resource):
+    def get(self):
+        pass
+
+##
+
+class AssocListInfo(Resource):
+    def get(self):
+        pass
+
+class AssocMetaChrpos(Resource):
+    def get(self):
+        pass
+
+class AssocMetaRsid(Resource):
+    def get(self):
+        pass
+
+class AssocMetaCpgid(Resource):
+    def get(self):
+        pass
+
+class AssocMetaEntrez(Resource):
+    def get(self):
+        pass
+
+api.add_resource(SnpListInfo, '/godmc/api/v0.1/snps', endpoint='snps')
+api.add_resource(SnpInfo, '/godmc/api/v0.1/snps/rsid/<str:rsid>', endpoint='snp')
+
+
+#api.add_resource(SnpInfo, '/godmc/api/v0.1/snps/chrpos/<str:chrpos>', endpoint='snp')
+
