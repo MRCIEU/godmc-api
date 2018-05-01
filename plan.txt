@@ -1,8 +1,4 @@
-Problems with db
-
-gene chromosomes are all 0
-cpg table is wrong
-
+Useful guide: https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask
 
 import PySQLPool
 
