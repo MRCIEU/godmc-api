@@ -191,23 +191,23 @@ class Readme(Resource):
 
 
 api.add_resource(Readme, 
-	'/godmc/api/'+version+'', endpoint='readme')
+	'/'+version+'', endpoint='readme')
 api.add_resource(AssocMetaRsid,
-	'/godmc/api/'+version+'/assoc_meta/rsid/<rsid>', endpoint='AssocMetaRsid')
+	'/'+version+'/assoc_meta/rsid/<rsid>', endpoint='AssocMetaRsid')
 api.add_resource(AssocMetaSnp,
-	'/godmc/api/'+version+'/assoc_meta/snp/<snp>', endpoint='AssocMetaSnp')
+	'/'+version+'/assoc_meta/snp/<snp>', endpoint='AssocMetaSnp')
 api.add_resource(AssocMetaCpg, 
-	'/godmc/api/'+version+'/assoc_meta/cpg/<cpg>', endpoint='AssocMetaCpg')
+	'/'+version+'/assoc_meta/cpg/<cpg>', endpoint='AssocMetaCpg')
 api.add_resource(AssocMetaGene, 
-	'/godmc/api/'+version+'/assoc_meta/gene/<attribute>/<gene>', endpoint='AssocMetaGene')
+	'/'+version+'/assoc_meta/gene/<attribute>/<gene>', endpoint='AssocMetaGene')
 api.add_resource(AssocMetaRange,
-	'/godmc/api/'+version+'/assoc_meta/range/<attribute>/<chrrange>', endpoint='AssocMetaRange')
+	'/'+version+'/assoc_meta/range/<attribute>/<chrrange>', endpoint='AssocMetaRange')
 api.add_resource(InfoAttribute, 
-	'/godmc/api/'+version+'/info/<attribute>', endpoint='InfoAttribute')
+	'/'+version+'/info/<attribute>', endpoint='InfoAttribute')
 api.add_resource(InfoAttributeItem, 
-	'/godmc/api/'+version+'/info/<attribute>/<item>', endpoint='InfoAttributeItem')
+	'/'+version+'/info/<attribute>/<item>', endpoint='InfoAttributeItem')
 
-api.add_resource(ComplexQuery, '/godmc/api/'+version+'/query', endpoint='ComplexQuery')
+api.add_resource(ComplexQuery, '/'+version+'/query', endpoint='ComplexQuery')
 
 if __name__ == '__main__':
 	app.run(debug=True)
