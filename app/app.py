@@ -206,6 +206,8 @@ api.add_resource(InfoAttribute,
 	'/'+version+'/info/<attribute>', endpoint='InfoAttribute')
 api.add_resource(InfoAttributeItem, 
 	'/'+version+'/info/<attribute>/<item>', endpoint='InfoAttributeItem')
+api.add_resource(GetAttributeList,
+	'/'+version+'/list/<attribute>', endpoint='GetAttributeList')
 
 api.add_resource(ComplexQuery, '/'+version+'/query', endpoint='ComplexQuery')
 
