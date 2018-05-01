@@ -11,7 +11,7 @@ def get_connection(fn):
 def run_query(SQL, dbConnection):
 	query = PySQLPool.getNewQuery(dbConnection)
 	query.Query(SQL)
-	return json.dumps(query.record)
+	return query.record
 
 
 ## SNPs
@@ -77,26 +77,32 @@ def query_snp_range(chrrange, dbConnection, columns="*"):
 
 def query_assocmeta_cpgid(cpgid, dbConnection, columns="*", maxpval=0.05):
 	cpgids = ",".join([ "'" + x + "'" for x in cpgid ])
-	SQL = """SELECT {0} from assoc_meta
-		WHERE cpg IN ({1})
-		AND pval < {2}
-		ORDER BY pval""".format(columns, cpgids, maxpval)
+	cols = ",".join(["a." + x for x in columns.split(",")])
+	SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM assoc_meta a, snp b
+		WHERE a.snp=b.name
+		AND a.cpg IN ({1})
+		AND a.pval < {2}
+		ORDER BY a.pval""".format(cols, cpgids, maxpval)
 	return run_query(SQL, dbConnection)
 
 def query_assocmeta_snpid(snpid, dbConnection, columns="*", maxpval=0.05):
 	snpids = ",".join([ "'" + x + "'" for x in snpid ])
-	SQL = """SELECT {0} from assoc_meta
-		WHERE snp IN ({1})
-		AND pval < {2}
-		ORDER BY pval""".format(columns, snpids, maxpval)
+	cols = ",".join(["a." + x for x in columns.split(",")])
+	SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM assoc_meta a, snp b
+		WHERE a.snp=b.name
+		AND a.snp IN ({1})
+		AND a.pval < {2}
+		ORDER BY a.pval""".format(cols, snpids, maxpval)
 	return run_query(SQL, dbConnection)
 
 def query_assocmeta_rsid(rsid, dbConnection, columns="*", maxpval=0.05):
-	snpids = ",".join([ "'" + x['name'] + "'" for x in get_snpid_from_rsid(rsid, dbConnection) ])
-	SQL = """SELECT {0} from assoc_meta
-		WHERE snp IN ({1})
-		AND pval < {2}
-		ORDER BY pval""".format(columns, snpids, maxpval)
+	rsids = ",".join([ "'" + x + "'" for x in rsid ])
+	cols = ",".join(["a." + x for x in columns.split(",")])
+	SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM assoc_meta a, snp b
+		WHERE a.snp=b.name
+		AND b.rsid IN ({1})
+		AND a.pval < {2}
+		ORDER BY a.pval""".format(cols, rsids, maxpval)
 	return run_query(SQL, dbConnection)
 
 def query_assocmeta_gene_snp(gene, dbConnection, window=250000, columns="*", maxpval=0.05):
@@ -105,14 +111,21 @@ def query_assocmeta_gene_snp(gene, dbConnection, window=250000, columns="*", max
 	query = PySQLPool.getNewQuery(dbConnection)
 	query.Query(SQL)
 	geneinfo = query.record[0]
-	SQL = """SELECT name from snp
-		WHERE chr = {0}
-		AND pos >= {1}
-		AND pos <= {2}""".format(geneinfo['chr'], geneinfo['start_pos']-window, geneinfo['start_pos']+window)
+	if len(geneinfo) is 0:
+		return ()
+	print("QUERY1")
+	cols = ",".join(["a." + x for x in columns.split(",")])
+	SQL = """SELECT {0}, b.name, b.rsid, b.chr, b.pos, b.allele1 AS a1, b.allele2 AS a2 FROM assoc_meta a, snp b
+		WHERE a.snp=b.name
+		AND b.chr = {1}
+		AND b.pos >= {2}
+		AND b.pos <= {3}
+		AND a.pval < {4}
+		ORDER BY a.pval""".format(cols, geneinfo['chr'], geneinfo['start_pos']-window, geneinfo['start_pos']+window, maxpval)
+
 	query = PySQLPool.getNewQuery(dbConnection)
 	query.Query(SQL)
-	snpid = [x['name'] for x in query.record]
-	return query_assocmeta_snpid(snpid, dbConnection, columns, maxpval)
+	return query.record
 
 def query_assocmeta_gene_cpg(gene, dbConnection, window=250000, columns="*", maxpval=0.05):
 	# get IDs
@@ -120,12 +133,19 @@ def query_assocmeta_gene_cpg(gene, dbConnection, window=250000, columns="*", max
 	query = PySQLPool.getNewQuery(dbConnection)
 	query.Query(SQL)
 	geneinfo = query.record[0]
-	SQL = """SELECT name from cpg
-		WHERE chr = {0}
-		AND pos >= {1}
-		AND pos <= {2}""".format(geneinfo['chr'], geneinfo['start_pos']-window, geneinfo['start_pos']+window)
+	if len(geneinfo) is 0:
+		return ()
+	cols = ",".join(["a." + x for x in columns.split(",")])
+	SQL = """SELECT {0}, b.name, b.rsid, c.chr, c.pos, b.allele1 AS a1, b.allele2 AS a2 FROM assoc_meta a, snp b, cpg c
+		WHERE a.snp=b.name
+		AND a.cpg=c.name
+		AND c.chr = {1}
+		AND c.pos >= {2}
+		AND c.pos <= {3}
+		AND a.pval < {4}
+		ORDER BY a.pval""".format(cols, geneinfo['chr'], geneinfo['start_pos']-window, geneinfo['start_pos']+window, maxpval)
+
 	query = PySQLPool.getNewQuery(dbConnection)
 	query.Query(SQL)
-	cpgid = [x['name'] for x in query.record]
-	return query_assocmeta_cpgid(cpgid, dbConnection, columns, maxpval)
+	return query.record
 
