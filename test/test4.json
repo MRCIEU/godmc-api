@@ -1,0 +1,7 @@
+{
+	"cpgs": ["cg14380065", "cg12715136"],
+	"pval": 1e-10,
+	"cistrans": "cis",
+	"columns": "pval, cpg, cistrans"
+}
+

@@ -43,6 +43,28 @@ functions.query_assocmeta_gene_snp("A1BG", dbConnection)
 functions.query_assocmeta_gene_cpg("AADAC", dbConnection)
 
 
+args = {
+	"rsids": ["rs6602381", "rs72828459"],
+	"pval": 1e-2,
+	"cistrans": "cis",
+	"columns": "pval, cpg",
+	# "snps": ["chr10:100003302:SNP"],
+	"snps": "",
+	"cpgs": ""
+}
+
+functions.complex_query(args, dbConnection)
+
+curl -H "Content-Type: application/json" -d @test.json http://127.0.0.1:5000/godmc/api/v0.1/query
+
+
+
+curl -i -H "Content-Type: application/json" -X POST -d '{"rsids": ["rs6602381", "rs72828459"],"pval": 1e-2,"cistrans": "cis","columns": "pval, cpg","snps": "","cpgs": ""}' http://127.0.0.1:5000/godmc/api/v0.1/query
+
+curl -H "Content-Type: application/json" -X GET http://127.0.0.1:5000/godmc/api/v0.1/info/rsid/rs12345
+
+curl -i -H "Content-Type: application/json" -X GET http://127.0.0.1:5000/godmc/api/v0.1/query
+
 rsid=["rs6602381", "rs72828459"]
 
 
@@ -136,4 +158,19 @@ api.add_resource(SnpInfo, '/godmc/api/v0.1/snps/rsid/<str:rsid>', endpoint='snp'
 
 
 #api.add_resource(SnpInfo, '/godmc/api/v0.1/snps/chrpos/<str:chrpos>', endpoint='snp')
+
+# Query multiple SNPs
+curl -i -H "Content-Type: application/json" -X POST -d @test0.json http://localhost:5000/godmc/api/v0.1/query
+
+# Query multiple rsids
+curl -i -H "Content-Type: application/json" -X POST -d @test1.json http://localhost:5000/godmc/api/v0.1/query
+
+# Query multiple CpGs
+curl -i -H "Content-Type: application/json" -X POST -d @test2.json http://localhost:5000/godmc/api/v0.1/query
+
+# Query rsids and CpGs
+curl -i -H "Content-Type: application/json" -X POST -d @test3.json http://localhost:5000/godmc/api/v0.1/query
+
+# As in test 2 but set pval threshold, trans only, and which columns to return
+curl -i -H "Content-Type: application/json" -X POST -d @test4.json http://localhost:5000/godmc/api/v0.1/query
 

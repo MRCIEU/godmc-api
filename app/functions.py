@@ -207,3 +207,95 @@ def query_assocmeta_range_cpg(chrrange, dbConnection, columns="*", maxpval=0.05)
 	return query.record
 
 
+def complex_query(args, dbConnection):
+
+	print(args)
+	if not args['pval']:
+		pval = 0.05
+	else:
+		pval = args['pval']
+
+	if not args['cistrans']:
+		cistrans = ''
+	elif args['cistrans'] == 'cis':
+		cistrans = 'AND a.cistrans = 0'
+	elif args['cistrans'] == 'trans':
+		cistrans = 'AND a.cistrans = 1'
+	else:
+		print( "cistrans problem")
+		return ()
+
+	if not args['columns']:
+		cols = 'a.*'
+	else:
+		cols = ",".join(["a." + x for x in args['columns'].split(",")])
+
+	if args['snps']:
+		snps = ",".join([ "'" + x + "'" for x in args['snps'] ])
+
+	if args['cpgs']:
+		cpgs = ",".join([ "'" + x + "'" for x in args['cpgs'] ])
+
+	if args['rsids']:
+		rsids = ",".join([ "'" + x + "'" for x in args['rsids'] ])
+
+	if args['snps'] and args['rsids']:
+		return ()
+
+	if args['cpgs'] and not args['snps'] and not args['rsids']:
+		SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM
+			assoc_meta a, snp b
+			WHERE a.snp=b.name
+			AND a.cpg IN ({1})
+			AND a.pval < {2}
+			{3}
+			ORDER BY a.pval""".format(cols, cpgs, pval, cistrans)
+
+
+	if args['snps'] and not args['cpgs']:
+		SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM
+			assoc_meta a, snp b
+			WHERE a.snp=b.name
+			AND a.snp IN ({1})
+			AND a.pval < {2}
+			{3}
+			ORDER BY a.pval""".format(cols, snps, pval, cistrans)
+
+	if args['snps'] and args['cpgs']:
+		SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM
+			assoc_meta a, snp b
+			WHERE a.snp=b.name
+			AND a.snp IN ({1})
+			AND a.cpg IN ({2})
+			AND a.pval < {3}
+			{4}
+			ORDER BY a.pval""".format(cols, snps, cpgs, pval, cistrans)
+
+	if args['rsids'] and not args['cpgs']:
+		SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM
+			assoc_meta a, snp b
+			WHERE a.snp=b.name
+			AND b.rsid IN ({1})
+			AND a.pval < {2}
+			{3}
+			ORDER BY a.pval""".format(cols, rsids, pval, cistrans)
+
+	if args['rsids'] and args['cpgs']:
+		SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM
+			assoc_meta a, snp b
+			WHERE a.snp=b.name
+			AND b.rsid IN ({1})
+			AND a.cpg IN ({2})
+			AND a.pval < {3}
+			{4}
+			ORDER BY a.pval""".format(cols, rsids, cpgs, pval, cistrans)
+
+	query = PySQLPool.getNewQuery(dbConnection)
+	query.Query(SQL)
+	return query.record
+
+
+
+
+
+
