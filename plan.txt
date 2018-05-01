@@ -35,11 +35,12 @@ functions.query_snp_name(["chr10:100003302:SNP", "chr10:10000018:SNP"], dbConnec
 functions.query_snp_chrpos(["10:100003302", "10:10000018"], dbConnection)
 functions.query_snp_range("1:100000000-100001000", dbConnection)
 
-functions.query_assocmeta_cpgid(["cg00000029"], dbConnection, "snp, cpg, pval", 1e-30)
+functions.query_assocmeta_cpgid(["cg00000029"], dbConnection, maxpval=1e-30)
 functions.query_assocmeta_snpid(["chr10:100003302:SNP", "chr10:10000018:SNP"], dbConnection, "pval")
 
-functions.query_assocmeta_rsid(["rs6602381", "rs72828459"], dbConnection, "pval")
+functions.query_assocmeta_rsid(["rs6602381"], dbConnection)
 functions.query_assocmeta_gene_snp("A1BG", dbConnection)
+functions.query_assocmeta_gene_cpg("AADAC", dbConnection)
 
 
 rsid=["rs6602381", "rs72828459"]
