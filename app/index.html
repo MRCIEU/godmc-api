@@ -314,44 +314,44 @@ $(document).ready(function () {
 <p>All results are json format</p>
 <section id="get-cpgs-associated-with-a-specific-snp" class="level2">
 <h2>Get CpGs associated with a specific SNP</h2>
-<pre><code>/godmc/api/v0.1/assoc_meta/cpg/&lt;cpgid&gt;</code></pre>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/cpg/cg17242362" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/cpg/cg17242362</a></p>
+<pre><code>/v0.1/assoc_meta/cpg/&lt;cpgid&gt;</code></pre>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362" class="uri">http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362</a></p>
 </section>
 <section id="get-snps-that-influence-a-specific-cpg" class="level2">
 <h2>Get SNPs that influence a specific CpG</h2>
-<pre><code>/godmc/api/v0.1/assoc_meta/rsid/&lt;rsid&gt;</code></pre>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/rsid/rs6602381" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/rsid/rs6602381</a></p>
+<pre><code>/v0.1/assoc_meta/rsid/&lt;rsid&gt;</code></pre>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381" class="uri">http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381</a></p>
 </section>
 <section id="get-all-mqtls-where-a-snp-or-cpg-is-within-some-range" class="level2">
 <h2>Get all mQTLs where a SNP or CpG is within some range</h2>
-<pre><code>/godmc/api/v0.1/assoc_meta/range/&lt;attribute&gt;/&lt;chrrange&gt;</code></pre>
+<pre><code>/v0.1/assoc_meta/range/&lt;attribute&gt;/&lt;chrrange&gt;</code></pre>
 <p>Note: this is a bit slow due to database, needs to be improved</p>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/range/cpg/10:10000018-10100020" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/range/cpg/10:10000018-10100020</a></p>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/range/snp/10:10000018-10100020" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/range/snp/10:10000018-10100020</a></p>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/assoc_meta/range/cpg/10:10000018-10100020" class="uri">http://api.godmc.org.uk/v0.1/assoc_meta/range/cpg/10:10000018-10100020</a></p>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/assoc_meta/range/snp/10:10000018-10100020" class="uri">http://api.godmc.org.uk/v0.1/assoc_meta/range/snp/10:10000018-10100020</a></p>
 </section>
 <section id="get-all-mqtls-where-a-snp-or-cpg-is-within-25kb-of-a-gene-start-site" class="level2">
 <h2>Get all mQTLs where a SNP or CpG is within 25kb of a gene start site</h2>
-<pre><code>/godmc/api/v0.1/assoc_meta/gene/&lt;attribute&gt;/&lt;gene&gt;</code></pre>
+<pre><code>/v0.1/assoc_meta/gene/&lt;attribute&gt;/&lt;gene&gt;</code></pre>
 <p>Note: this is a bit slow due to database, needs to be improved</p>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/gene/cpg/A1BG" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/gene/cpg/A1BG</a></p>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/gene/snp/A1BG" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/assoc_meta/gene/snp/A1BG</a></p>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/assoc_meta/gene/cpg/A1BG" class="uri">http://api.godmc.org.uk/v0.1/assoc_meta/gene/cpg/A1BG</a></p>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/assoc_meta/gene/snp/A1BG" class="uri">http://api.godmc.org.uk/v0.1/assoc_meta/gene/snp/A1BG</a></p>
 </section>
 <section id="get-a-list-of-all-genes" class="level2">
 <h2>Get a list of all genes</h2>
-<pre><code>/godmc/api/v0.1/list/gene</code></pre>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/list/gene" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/list/gene</a></p>
+<pre><code>/v0.1/list/gene</code></pre>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/list/gene" class="uri">http://api.godmc.org.uk/v0.1/list/gene</a></p>
 </section>
 <section id="get-information-about-a-snp-cpg-or-gene" class="level2">
 <h2>Get information about a SNP, CpG or gene</h2>
-<pre><code>/godmc/api/v0.1/info/&lt;attribute&gt;/&lt;item&gt;</code></pre>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/info/cpg/cg26866020" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/info/cpg/cg26866020</a></p>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/info/gene/A1BG" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/info/gene/A1BG</a></p>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/info/rsid/rs234" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/info/rsid/rs234</a></p>
-<p>e.g. <a href="http://127.0.0.1:5000/godmc/api/v0.1/info/snp/chr7:105561135:SNP" class="uri">http://127.0.0.1:5000/godmc/api/v0.1/info/snp/chr7:105561135:SNP</a></p>
+<pre><code>/v0.1/info/&lt;attribute&gt;/&lt;item&gt;</code></pre>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/info/cpg/cg26866020" class="uri">http://api.godmc.org.uk/v0.1/info/cpg/cg26866020</a></p>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/info/gene/A1BG" class="uri">http://api.godmc.org.uk/v0.1/info/gene/A1BG</a></p>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/info/rsid/rs234" class="uri">http://api.godmc.org.uk/v0.1/info/rsid/rs234</a></p>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/info/snp/chr7:105561135:SNP" class="uri">http://api.godmc.org.uk/v0.1/info/snp/chr7:105561135:SNP</a></p>
 </section>
 <section id="more-complex-queries" class="level2">
 <h2>More complex queries</h2>
-<pre><code>curl -i -H &quot;Content-Type: application/json&quot; -X POST -d @test.json http://localhost:5000/godmc/api/v0.1/query</code></pre>
+<pre><code>curl -i -H &quot;Content-Type: application/json&quot; -X POST -d @test.json http://localhost:5000/v0.1/query</code></pre>
 <p>Query multiple SNPs, json:</p>
 <pre><code>{
     &quot;snps&quot;: [&quot;chr10:100003302:SNP&quot;, &quot;chr10:99954538:INDEL&quot;, &quot;chr10:99981275:SNP&quot;]
