@@ -1,4 +1,12 @@
-# godmc-api
+---
+title: "GoDMC results API"
+output:
+  html_document:
+    toc: true
+    theme: united
+---
+
+---
 
 This is an API which is used to pull down results from the GoDMC meta analysis of genetic influences on DNA methylation levels. 
 
@@ -8,24 +16,23 @@ There are also more complex queries that can be obtained using `post`. Here a js
 
 All results are json format
 
-## Get mQTLs for a specific CpG
+---
+
+## Get mQTLs for a specific SNP or CpG
 
 ```
 /v0.1/assoc_meta/cpg/<cpgid>
-```
-
-e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362](http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362)
-
-## Get mQtls for a specific SNP
-
-```
 /v0.1/assoc_meta/rsid/<rsid>
 /v0.1/assoc_meta/snp/<snpid>
 ```
 
+e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362](http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362)
+
 e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381](http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381)
 
 e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/snp/chr10:10000018:SNP](http://api.godmc.org.uk/v0.1/assoc_meta/snp/chr10:10000018:SNP)
+
+---
 
 ## Get all mQTLs where a SNP or CpG is within some range
 
@@ -39,6 +46,7 @@ e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/range/cpg/10:10000000-10100000](ht
 
 e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/range/snp/10:10000000-10100000](http://api.godmc.org.uk/v0.1/assoc_meta/range/snp/10:10000000-10100000)
 
+---
 
 ## Get all mQTLs where a SNP or CpG is within 25kb of a gene start site
 
@@ -52,6 +60,8 @@ e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/gene/cpg/A1BG](http://api.godmc.or
 
 e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/gene/snp/A1BG](http://api.godmc.org.uk/v0.1/assoc_meta/gene/snp/A1BG)
 
+---
+
 ## Get a list of all genes
 
 ```
@@ -60,6 +70,7 @@ e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/gene/snp/A1BG](http://api.godmc.or
 
 e.g. [http://api.godmc.org.uk/v0.1/list/gene](http://api.godmc.org.uk/v0.1/list/gene)
 
+---
 
 ## Get information about a SNP, CpG or gene
 
@@ -75,6 +86,7 @@ e.g. [http://api.godmc.org.uk/v0.1/info/rsid/rs234](http://api.godmc.org.uk/v0.1
 
 e.g. [http://api.godmc.org.uk/v0.1/info/snp/chr7:105561135:SNP](http://api.godmc.org.uk/v0.1/info/snp/chr7:105561135:SNP)
 
+---
 
 ## More complex queries
 
