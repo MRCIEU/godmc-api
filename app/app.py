@@ -9,21 +9,12 @@ api = Api(app)
 
 version="v0.1"
 
+dbConnection = functions.get_connection("db.conf")
 
-# @app.errorhandler(404)
-# def not_found(error):
-#     return make_response(jsonify({'error': 'Not found'}), 404)
-# @app.errorhandler(405)
-# def not_found(error):
-#     return make_response(jsonify({'error': 'This is too big. Download the complete data'}), 405)
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
-
-
-# functions.query_assocmeta_cpgid(["cg00000029"], dbConnection, "snp, cpg, pval", 1e-30)
-# functions.query_assocmeta_snpid(["chr10:100003302:SNP", "chr10:10000018:SNP"], dbConnection, "pval")
-
-# functions.query_assocmeta_rsid(["rs6602381", "rs72828459"], dbConnection, "pval")
-# functions.query_assocmeta_gene_snp("A1BG", dbConnection)
 
 assoc_meta_fields = {
 	'cpg': fields.String,
@@ -52,19 +43,6 @@ assoc_meta_fields = {
 	'chunk': fields.Integer
 }
 
-# AssocMetaRsid_fields = assoc_meta_fields
-# AssocMetaRsid_fields['uri'] = fields.Url('temp1')
-
-# AssocMetaCpg_fields = assoc_meta_fields
-# AssocMetaCpg_fields['uri'] = fields.Url('AssocMetaRsid')
-
-# AssocMetaGeneCpg_fields = assoc_meta_fields
-# AssocMetaGeneCpg_fields['uri'] = fields.Url('AssocMetaGeneCpg')
-
-# AssocMetaGeneSnp_fields = assoc_meta_fields
-# AssocMetaGeneSnp_fields['uri'] = fields.Url('AssocMetaGeneSnp')
-
-dbConnection = functions.get_connection("db.conf")
 
 class AssocMetaRsid(Resource):
 	def __init__(self):
@@ -141,16 +119,6 @@ class AssocMetaRange(Resource):
 		return {'assoc_meta': marshal(out, assoc_meta_fields)}, 200
 
 
-# class InfoAttribute(Resource):
-# 	def __init__(self):
-# 		super(ListAttribute, self).__init__()
-
-# 	def get(self, attribute):
-# 		out = functions.get_attribute_list(dbConnection, attribute)
-# 		if len(out) == 0:
-# 			abort(404)
-# 		return out
-
 class InfoAttribute(Resource):
 	def __init__(self):
 		super(InfoAttribute, self).__init__()
@@ -186,12 +154,6 @@ class GetAttributeList(Resource):
 			abort(404)
 		return [x['name'] for x in out]
 
-
-# pval
-# snplist
-# rsidlist
-# cpglist
-# cistrans
 
 
 class ComplexQuery(Resource):
