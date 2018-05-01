@@ -7,12 +7,15 @@ from flask_restful import Api, Resource, reqparse, fields, marshal
 app = Flask(__name__, static_url_path="")
 api = Api(app)
 
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
-@app.errorhandler(405)
-def not_found(error):
-    return make_response(jsonify({'error': 'This is too big. Download the complete data'}), 405)
+version="v0.1"
+
+
+# @app.errorhandler(404)
+# def not_found(error):
+#     return make_response(jsonify({'error': 'Not found'}), 404)
+# @app.errorhandler(405)
+# def not_found(error):
+#     return make_response(jsonify({'error': 'This is too big. Download the complete data'}), 405)
 
 
 
@@ -184,12 +187,34 @@ class GetAttributeList(Resource):
 		return [x['name'] for x in out]
 
 
+# pval
+# snplist
+# rsidlist
+# cpglist
+# cistrans
 
 
+class ComplexQuery(Resource):
 
+	def __init__(self):
+		self.reqparse = reqparse.RequestParser()
+		self.reqparse.add_argument('snps', type=str, location='json', action="append")
+		self.reqparse.add_argument('rsids', type=str, location='json', action="append")
+		self.reqparse.add_argument('cpgs', type=str, location='json', action="append")
+		self.reqparse.add_argument('pval', type=float, default=0.05, location='json')
+		# self.reqparse.add_argument('cistrans', type=str, location='json')
+		self.reqparse.add_argument('cistrans', choices=('','cis','trans'), location='json')
+		self.reqparse.add_argument('columns', type=str, location='json')
+		super(ComplexQuery, self).__init__()
 
+	def get(self):
+		return "hello"
 
-
+	def post(self):
+		args = self.reqparse.parse_args()
+		out = functions.complex_query(args, dbConnection)
+		print(out)
+		return out
 
 
 ###
@@ -203,26 +228,24 @@ class Readme(Resource):
 		return send_from_directory(".", "index.html")
 
 
-
 api.add_resource(Readme, 
-	'/godmc/api/v0.1/', endpoint='readme')
-
+	'/godmc/api/'+version+'', endpoint='readme')
 api.add_resource(AssocMetaRsid,
-	'/godmc/api/v0.1/assoc_meta/rsid/<rsid>', endpoint='AssocMetaRsid')
+	'/godmc/api/'+version+'/assoc_meta/rsid/<rsid>', endpoint='AssocMetaRsid')
 api.add_resource(AssocMetaSnp,
-	'/godmc/api/v0.1/assoc_meta/snp/<snp>', endpoint='AssocMetaSnp')
+	'/godmc/api/'+version+'/assoc_meta/snp/<snp>', endpoint='AssocMetaSnp')
 api.add_resource(AssocMetaCpg, 
-	'/godmc/api/v0.1/assoc_meta/cpg/<cpg>', endpoint='AssocMetaCpg')
+	'/godmc/api/'+version+'/assoc_meta/cpg/<cpg>', endpoint='AssocMetaCpg')
 api.add_resource(AssocMetaGene, 
-	'/godmc/api/v0.1/assoc_meta/gene/<attribute>/<gene>', endpoint='AssocMetaGene')
+	'/godmc/api/'+version+'/assoc_meta/gene/<attribute>/<gene>', endpoint='AssocMetaGene')
 api.add_resource(AssocMetaRange,
-	'/godmc/api/v0.1/assoc_meta/range/<attribute>/<chrrange>', endpoint='AssocMetaRange')
+	'/godmc/api/'+version+'/assoc_meta/range/<attribute>/<chrrange>', endpoint='AssocMetaRange')
 api.add_resource(InfoAttribute, 
-	'/godmc/api/v0.1/info/<attribute>', endpoint='InfoAttribute')
+	'/godmc/api/'+version+'/info/<attribute>', endpoint='InfoAttribute')
 api.add_resource(InfoAttributeItem, 
-	'/godmc/api/v0.1/info/<attribute>/<item>', endpoint='InfoAttributeItem')
+	'/godmc/api/'+version+'/info/<attribute>/<item>', endpoint='InfoAttributeItem')
 
-
+api.add_resource(ComplexQuery, '/godmc/api/'+version+'/query', endpoint='ComplexQuery')
 
 if __name__ == '__main__':
 	app.run(debug=True)
