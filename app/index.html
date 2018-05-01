@@ -372,26 +372,26 @@ $(document).ready(function () {
 </section>
 <section id="more-complex-queries" class="level2">
 <h2>More complex queries</h2>
-<pre><code>curl -i -H &quot;Content-Type: application/json&quot; -X POST -d @test.json http://localhost:5000/v0.1/query</code></pre>
-<p>Query multiple SNPs, json:</p>
-<pre><code>{
+<pre class="bash"><code>curl -i -H &quot;Content-Type: application/json&quot; -X POST -d @test.json http://localhost:5000/v0.1/query</code></pre>
+<p>Query multiple SNPs, <code>test.json</code>:</p>
+<pre class="json"><code>{
     &quot;snps&quot;: [&quot;chr10:100003302:SNP&quot;, &quot;chr10:99954538:INDEL&quot;, &quot;chr10:99981275:SNP&quot;]
 }</code></pre>
-<p>Query multiple rsids, json:</p>
-<pre><code>{
+<p>Query multiple rsids, <code>test.json</code>:</p>
+<pre class="json"><code>{
     &quot;rsids&quot;: [&quot;rs6602381&quot;, &quot;rs72828459&quot;, &quot;rs234&quot;]
 }</code></pre>
-<p>Query multiple CpGs, json:</p>
-<pre><code>{
+<p>Query multiple CpGs, <code>test.json</code>:</p>
+<pre class="json"><code>{
     &quot;cpgs&quot;: [&quot;cg14380065&quot;, &quot;cg12715136&quot;]
 }</code></pre>
-<p>Query rsids and CpGs, json:</p>
-<pre><code>{
+<p>Query rsids and CpGs, <code>test.json</code>:</p>
+<pre class="json"><code>{
     &quot;rsids&quot;: [&quot;rs6602381&quot;, &quot;rs72828459&quot;, &quot;rs234&quot;],
     &quot;cpgs&quot;: [&quot;cg14380065&quot;, &quot;cg12715136&quot;]
 }</code></pre>
-<p>As in test 2 but set pval threshold, trans only, and which columns to return, json:</p>
-<pre><code>{
+<p>As in test 2 but set pval threshold, cis only, and which columns to return, <code>test.json</code>:</p>
+<pre class="json"><code>{
     &quot;cpgs&quot;: [&quot;cg14380065&quot;, &quot;cg12715136&quot;],
     &quot;pval&quot;: 1e-10,
     &quot;cistrans&quot;: &quot;cis&quot;,

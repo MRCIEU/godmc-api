@@ -90,46 +90,46 @@ e.g. [http://api.godmc.org.uk/v0.1/info/snp/chr7:105561135:SNP](http://api.godmc
 
 ## More complex queries
 
-```
+```bash
 curl -i -H "Content-Type: application/json" -X POST -d @test.json http://localhost:5000/v0.1/query
 ```
 
-Query multiple SNPs, json:
+Query multiple SNPs, `test.json`:
 
-```
+```json
 {
     "snps": ["chr10:100003302:SNP", "chr10:99954538:INDEL", "chr10:99981275:SNP"]
 }
 ```
 
-Query multiple rsids, json:
+Query multiple rsids, `test.json`:
 
-```
+```json
 {
     "rsids": ["rs6602381", "rs72828459", "rs234"]
 }
 ```
 
-Query multiple CpGs, json:
+Query multiple CpGs, `test.json`:
 
-```
+```json
 {
     "cpgs": ["cg14380065", "cg12715136"]
 }
 ```
 
-Query rsids and CpGs, json:
+Query rsids and CpGs, `test.json`:
 
-```
+```json
 {
     "rsids": ["rs6602381", "rs72828459", "rs234"],
     "cpgs": ["cg14380065", "cg12715136"]
 }
 ```
 
-As in test 2 but set pval threshold, trans only, and which columns to return, json:
+As in test 2 but set pval threshold, cis only, and which columns to return, `test.json`:
 
-```
+```json
 {
     "cpgs": ["cg14380065", "cg12715136"],
     "pval": 1e-10,
