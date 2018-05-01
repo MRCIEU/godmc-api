@@ -8,7 +8,7 @@ There are also more complex queries that can be obtained using `post`. Here a js
 
 All results are json format
 
-## Get CpGs associated with a specific SNP
+## Get mQTLs for a specific CpG
 
 ```
 /v0.1/assoc_meta/cpg/<cpgid>
@@ -16,13 +16,16 @@ All results are json format
 
 e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362](http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362)
 
-## Get SNPs that influence a specific CpG
+## Get mQtls for a specific SNP
 
 ```
 /v0.1/assoc_meta/rsid/<rsid>
+/v0.1/assoc_meta/snp/<snpid>
 ```
 
 e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381](http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381)
+
+e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/snp/chr10:10000018:SNP](http://api.godmc.org.uk/v0.1/assoc_meta/snp/chr10:10000018:SNP)
 
 ## Get all mQTLs where a SNP or CpG is within some range
 
@@ -32,9 +35,9 @@ e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381](http://api.godmc.o
 
 Note: this is a bit slow due to database, needs to be improved
 
-e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/range/cpg/10:10000018-10100020](http://api.godmc.org.uk/v0.1/assoc_meta/range/cpg/10:10000018-10100020)
+e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/range/cpg/10:10000000-10100000](http://api.godmc.org.uk/v0.1/assoc_meta/range/cpg/10:10000000-10100000)
 
-e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/range/snp/10:10000018-10100020](http://api.godmc.org.uk/v0.1/assoc_meta/range/snp/10:10000018-10100020)
+e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/range/snp/10:10000000-10100000](http://api.godmc.org.uk/v0.1/assoc_meta/range/snp/10:10000000-10100000)
 
 
 ## Get all mQTLs where a SNP or CpG is within 25kb of a gene start site
