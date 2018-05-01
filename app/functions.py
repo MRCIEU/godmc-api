@@ -24,17 +24,33 @@ def get_snpid_from_rsid(rsid, dbConnection):
 	query.Query(SQL)
 	return query.record
 
-def query_snp_rsids(rsid, dbConnection, columns="*"):
-	rsids = ",".join([ "'" + x + "'" for x in rsid ])
-	SQL = """SELECT {0} from snp 
-		WHERE rsid IN ({1})""".format(columns, rsids)
+
+## Gene / SNP / CpG lists
+
+def get_attribute_list(dbConnection, attribute, columns="*", limit=2147483647):
+	SQL = """SELECT {0} from {1} LIMIT {2}""".format(columns, attribute, limit)
 	return run_query(SQL, dbConnection)
 
-def query_snp_name(name, dbConnection, columns="*"):
-	names = ",".join([ "'" + x + "'" for x in name ])
-	SQL = """SELECT {0} from snp 
-		WHERE name IN ({1})""".format(columns, names)
+def get_attribute_item(attribute, item, dbConnection, columns="*"):
+	items = ",".join([ "'" + x + "'" for x in item ])
+	if attribute == "rsid":
+		table = "snp"
+		col = "rsid"
+	elif attribute == "snp":
+		table = "snp"
+		col = "name"
+	elif attribute == "cpg":
+		table = "cpg"
+		col = "name"
+	elif attribute == "gene":
+		table = "gene"
+		col = "name"
+	else:
+		return ()
+	SQL = """SELECT {0} from {1}
+		WHERE {2} IN ({3})""".format(columns, table, col, items)
 	return run_query(SQL, dbConnection)
+
 
 
 # def query_snp_chrpos(chrpos, dbConnection):
@@ -148,4 +164,46 @@ def query_assocmeta_gene_cpg(gene, dbConnection, window=250000, columns="*", max
 	query = PySQLPool.getNewQuery(dbConnection)
 	query.Query(SQL)
 	return query.record
+
+
+def query_assocmeta_range_snp(chrrange, dbConnection, columns="*", maxpval=0.05):
+	# get IDs
+	temp = chrrange.split(":")
+	chr=int(temp[0])
+	temp2=temp[1].split("-")
+	p1=int(temp2[0])
+	p2=int(temp2[1])
+	cols = ",".join(["a." + x for x in columns.split(",")])
+	SQL = """SELECT {0}, b.name, b.rsid, b.chr, b.pos, b.allele1 AS a1, b.allele2 AS a2 FROM assoc_meta a, snp b
+		WHERE a.snp=b.name
+		AND b.chr = {1}
+		AND b.pos >= {2}
+		AND b.pos <= {3}
+		AND a.pval < {4}
+		ORDER BY a.pval""".format(cols, chr, p1, p2, maxpval)
+	query = PySQLPool.getNewQuery(dbConnection)
+	query.Query(SQL)
+	return query.record
+
+
+def query_assocmeta_range_cpg(chrrange, dbConnection, columns="*", maxpval=0.05):
+	# get IDs
+	temp = chrrange.split(":")
+	chr=int(temp[0])
+	temp2=temp[1].split("-")
+	p1=int(temp2[0])
+	p2=int(temp2[1])
+	cols = ",".join(["a." + x for x in columns.split(",")])
+	SQL = """SELECT {0}, b.name, b.rsid, c.chr, c.pos, b.allele1 AS a1, b.allele2 AS a2 FROM assoc_meta a, snp b, cpg c
+		WHERE a.snp=b.name
+		AND a.cpg = c.name
+		AND c.chr = {1}
+		AND c.pos >= {2}
+		AND c.pos <= {3}
+		AND a.pval < {4}
+		ORDER BY a.pval""".format(cols, chr, p1, p2, maxpval)
+	query = PySQLPool.getNewQuery(dbConnection)
+	query.Query(SQL)
+	return query.record
+
 
