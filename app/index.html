@@ -372,7 +372,10 @@ $(document).ready(function () {
 </section>
 <section id="more-complex-queries" class="level2">
 <h2>More complex queries</h2>
-<pre class="bash"><code>curl -i -H &quot;Content-Type: application/json&quot; -X POST -d @test.json http://localhost:5000/v0.1/query</code></pre>
+<p>There is a limit to the length of a URL, so if you want to extract a large list of SNPs then we need to post the query details through a file. This can be done through <code>curl</code> e.g. using:</p>
+<pre class="bash"><code>curl -i -H &quot;Content-Type: application/json&quot; -X POST -d @test.json http://api.godmc.org.uk/v0.1/query</code></pre>
+<p>Here we are posting the <code>test.json</code> file that contains the details of the query. Examples below</p>
+<hr />
 <p>Query multiple SNPs, <code>test.json</code>:</p>
 <pre class="json"><code>{
     &quot;snps&quot;: [&quot;chr10:100003302:SNP&quot;, &quot;chr10:99954538:INDEL&quot;, &quot;chr10:99981275:SNP&quot;]
@@ -385,12 +388,12 @@ $(document).ready(function () {
 <pre class="json"><code>{
     &quot;cpgs&quot;: [&quot;cg14380065&quot;, &quot;cg12715136&quot;]
 }</code></pre>
-<p>Query rsids and CpGs, <code>test.json</code>:</p>
+<p>Query mQTLs for rsids and CpGs, (i.e. get all results where an mQTL contains a SNP and a CpG specified in the lists), <code>test.json</code>:</p>
 <pre class="json"><code>{
     &quot;rsids&quot;: [&quot;rs6602381&quot;, &quot;rs72828459&quot;, &quot;rs234&quot;],
     &quot;cpgs&quot;: [&quot;cg14380065&quot;, &quot;cg12715136&quot;]
 }</code></pre>
-<p>As in test 2 but set pval threshold, cis only, and which columns to return, <code>test.json</code>:</p>
+<p>As in the third example but set p-value threshold, only return cis effects, and specify which columns to return, <code>test.json</code>:</p>
 <pre class="json"><code>{
     &quot;cpgs&quot;: [&quot;cg14380065&quot;, &quot;cg12715136&quot;],
     &quot;pval&quot;: 1e-10,
