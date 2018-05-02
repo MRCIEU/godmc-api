@@ -90,9 +90,15 @@ e.g. [http://api.godmc.org.uk/v0.1/info/snp/chr7:105561135:SNP](http://api.godmc
 
 ## More complex queries
 
+There is a limit to the length of a URL, so if you want to extract a large list of SNPs then we need to post the query details through a file. This can be done through `curl` e.g. using:
+
 ```bash
-curl -i -H "Content-Type: application/json" -X POST -d @test.json http://localhost:5000/v0.1/query
+curl -i -H "Content-Type: application/json" -X POST -d @test.json http://api.godmc.org.uk/v0.1/query
 ```
+
+Here we are posting the `test.json` file that contains the details of the query. Examples below
+
+---
 
 Query multiple SNPs, `test.json`:
 
@@ -118,7 +124,7 @@ Query multiple CpGs, `test.json`:
 }
 ```
 
-Query rsids and CpGs, `test.json`:
+Query mQTLs for rsids and CpGs, (i.e. get all results where an mQTL contains a SNP and a CpG specified in the lists), `test.json`:
 
 ```json
 {
@@ -127,7 +133,7 @@ Query rsids and CpGs, `test.json`:
 }
 ```
 
-As in test 2 but set pval threshold, cis only, and which columns to return, `test.json`:
+As in the third example but set p-value threshold, only return cis effects, and specify which columns to return, `test.json`:
 
 ```json
 {
