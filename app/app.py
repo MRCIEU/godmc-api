@@ -3,6 +3,8 @@
 import functions
 from flask import Flask, jsonify, abort, make_response, send_from_directory
 from flask_restful import Api, Resource, reqparse, fields, marshal
+import math, urllib, pybedtools, uuid, subprocess, io
+
 
 app = Flask(__name__, static_url_path="")
 api = Api(app)
@@ -75,6 +77,33 @@ class AssocMetaCpg(Resource):
 		if len(out) == 0:
 			abort(404)
 		return {'assoc_meta': marshal(out, assoc_meta_fields)}, 200
+
+
+class BigbedCpG(Resource):
+	def __init__(self):
+		super(BigbedCpG, self).__init__()
+
+	def get(self, cpg):
+		dat = functions.query_assocmeta_cpgid([cpg], dbConnection, "pval", 1)
+		if len(dat) == 0:
+			abort(404)
+		# convert to bedfile
+		o = []
+		for x in dat:
+			p = x['name'].split(":")
+			o.append((p[0], int(p[1])-1, int(p[1]), str(-math.log(max(1e-100, x['pval'])))))
+		x = pybedtools.BedTool(o)
+		# get random filename
+		fn = str(uuid.uuid4())
+		# write to bigbed
+		cmd = ["./bedSort", x.fn, x.fn]
+		subprocess.call(cmd)
+		cmd = ["./bedToBigBed", x.fn, "hg19", fn]
+		subprocess.call(cmd)
+		# return file download
+		bites = open(fn, 'rb')
+		return flask.send_file(io.BytesIO(bites.read()), attachment_filename=cpgid+"bb", mimetype="application/octet-stream")
+
 
 class AssocMetaGene(Resource):
 	def __init__(self):
@@ -198,6 +227,8 @@ api.add_resource(AssocMetaSnp,
 	'/'+version+'/assoc_meta/snp/<snp>', endpoint='AssocMetaSnp')
 api.add_resource(AssocMetaCpg, 
 	'/'+version+'/assoc_meta/cpg/<cpg>', endpoint='AssocMetaCpg')
+api.add_resource(BigbedCpG, 
+	'/'+version+'/bigbed/cpg/<cpg>', endpoint='BigbedCpG')
 api.add_resource(AssocMetaGene, 
 	'/'+version+'/assoc_meta/gene/<attribute>/<gene>', endpoint='AssocMetaGene')
 api.add_resource(AssocMetaRange,
