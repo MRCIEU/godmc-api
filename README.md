@@ -18,6 +18,16 @@ All results are json format
 
 ---
 
+## Get a list of all cohorts
+
+```
+/v0.1/cohorts
+```
+
+e.g. [http://api.godmc.org.uk/v0.1/cohorts](http://api.godmc.org.uk/v0.1/cohorts)
+
+---
+
 ## Get mQTLs for a specific SNP or CpG
 
 ```
@@ -31,6 +41,20 @@ e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362](http://api.godmc.o
 e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381](http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381)
 
 e.g. [http://api.godmc.org.uk/v0.1/assoc_meta/snp/chr10:10000018:SNP](http://api.godmc.org.uk/v0.1/assoc_meta/snp/chr10:10000018:SNP)
+
+---
+
+The -log10(p-values) for all associations with a particular SNP or CpG can be obtained in bed or BigBed format as:
+
+```
+/v0.1/dl/<format>/cpg/<cpgid>
+/v0.1/dl/<format>/snp/<snpid>
+```
+
+e.g. [http://api.godmc.org.uk/v0.1/dl/bigbed/cpg/cg17242362](http://api.godmc.org.uk/v0.1/dl/bigbed/cpg/cg17242362)
+
+e.g. [http://api.godmc.org.uk/v0.1/dl/bed/snp/chr10:10000018:SNP](http://api.godmc.org.uk/v0.1/dl/bed/snp/chr10:10000018:SNP)
+
 
 ---
 

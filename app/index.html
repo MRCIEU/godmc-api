@@ -314,6 +314,7 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
+<li><a href="#get-a-list-of-all-cohorts">Get a list of all cohorts</a></li>
 <li><a href="#get-mqtls-for-a-specific-snp-or-cpg">Get mQTLs for a specific SNP or CpG</a></li>
 <li><a href="#get-all-mqtls-where-a-snp-or-cpg-is-within-some-range">Get all mQTLs where a SNP or CpG is within some range</a></li>
 <li><a href="#get-all-mqtls-where-a-snp-or-cpg-is-within-25kb-of-a-gene-start-site">Get all mQTLs where a SNP or CpG is within 25kb of a gene start site</a></li>
@@ -329,6 +330,12 @@ $(document).ready(function () {
 <p>There are also more complex queries that can be obtained using <code>post</code>. Here a json file needs to be built that describes the query</p>
 <p>All results are json format</p>
 <hr />
+<section id="get-a-list-of-all-cohorts" class="level2">
+<h2>Get a list of all cohorts</h2>
+<pre><code>/v0.1/cohorts</code></pre>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/cohorts" class="uri">http://api.godmc.org.uk/v0.1/cohorts</a></p>
+<hr />
+</section>
 <section id="get-mqtls-for-a-specific-snp-or-cpg" class="level2">
 <h2>Get mQTLs for a specific SNP or CpG</h2>
 <pre><code>/v0.1/assoc_meta/cpg/&lt;cpgid&gt;
@@ -337,6 +344,12 @@ $(document).ready(function () {
 <p>e.g. <a href="http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362" class="uri">http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362</a></p>
 <p>e.g. <a href="http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381" class="uri">http://api.godmc.org.uk/v0.1/assoc_meta/rsid/rs6602381</a></p>
 <p>e.g. <a href="http://api.godmc.org.uk/v0.1/assoc_meta/snp/chr10:10000018:SNP" class="uri">http://api.godmc.org.uk/v0.1/assoc_meta/snp/chr10:10000018:SNP</a></p>
+<hr />
+<p>The -log10(p-values) for all associations with a particular SNP or CpG can be obtained in bed or BigBed format as:</p>
+<pre><code>/v0.1/dl/&lt;format&gt;/cpg/&lt;cpgid&gt;
+/v0.1/dl/&lt;format&gt;/snp/&lt;snpid&gt;</code></pre>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/dl/bigbed/cpg/cg17242362" class="uri">http://api.godmc.org.uk/v0.1/dl/bigbed/cpg/cg17242362</a></p>
+<p>e.g. <a href="http://api.godmc.org.uk/v0.1/dl/bed/snp/chr10:10000018:SNP" class="uri">http://api.godmc.org.uk/v0.1/dl/bed/snp/chr10:10000018:SNP</a></p>
 <hr />
 </section>
 <section id="get-all-mqtls-where-a-snp-or-cpg-is-within-some-range" class="level2">
