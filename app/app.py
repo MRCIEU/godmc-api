@@ -1,9 +1,9 @@
 #!flask/bin/python
 
 import functions
-from flask import Flask, jsonify, abort, make_response, send_from_directory
+from flask import Flask, jsonify, abort, make_response, send_from_directory, send_file, Response
 from flask_restful import Api, Resource, reqparse, fields, marshal
-import math, urllib, pybedtools, uuid, subprocess, io
+import math, urllib, pybedtools, uuid, subprocess, io, platform, tempfile
 
 
 app = Flask(__name__, static_url_path="")
@@ -79,11 +79,11 @@ class AssocMetaCpg(Resource):
 		return {'assoc_meta': marshal(out, assoc_meta_fields)}, 200
 
 
-class BigbedCpG(Resource):
+class BigbedCpg(Resource):
 	def __init__(self):
-		super(BigbedCpG, self).__init__()
+		super(BigbedCpg, self).__init__()
 
-	def get(self, cpg):
+	def get(self, format, cpg):
 		dat = functions.query_assocmeta_cpgid([cpg], dbConnection, "pval", 1)
 		if len(dat) == 0:
 			abort(404)
@@ -94,15 +94,61 @@ class BigbedCpG(Resource):
 			o.append((p[0], int(p[1])-1, int(p[1]), str(-math.log(max(1e-100, x['pval'])))))
 		x = pybedtools.BedTool(o)
 		# get random filename
-		fn = str(uuid.uuid4())
+		# fn = str(uuid.uuid4())
+		tf = tempfile.NamedTemporaryFile()
+		fn = tf.name
+		print fn
 		# write to bigbed
-		cmd = ["./bedSort", x.fn, x.fn]
+		cmd = ["./bed/" + platform.system() + "/bedSort", x.fn, x.fn]
 		subprocess.call(cmd)
-		cmd = ["./bedToBigBed", x.fn, "hg19", fn]
+		cmd = ["./bed/" + platform.system() + "/bedToBigBed", x.fn, "bed/hg19", fn]
 		subprocess.call(cmd)
 		# return file download
-		bites = open(fn, 'rb')
-		return flask.send_file(io.BytesIO(bites.read()), attachment_filename=cpgid+"bb", mimetype="application/octet-stream")
+		if format == "bigbed":
+			bites = open(fn, 'rb')
+			return send_file(io.BytesIO(bites.read()), attachment_filename=cpg+".bb", mimetype="application/octet-stream")
+		elif format == "bed":
+			txt = open(x.fn, 'r')
+			return Response(txt.read(), mimetype="text/plain")
+		else:
+			abort(404)
+
+
+class BigbedSnp(Resource):
+	def __init__(self):
+		super(BigbedSnp, self).__init__()
+
+	def get(self, format, snp):
+		dat = functions.query_assocmeta_snpid([snp], dbConnection, "cpg,pval", 1)
+		if len(dat) == 0:
+			abort(404)
+		o = []
+		for x in dat:
+			o.append({'name': x['cpg'], 'pval': str(-math.log(max(1e-100, x['pval'])))})
+
+		c = functions.get_attribute_item("cpg", [b['name'] for b in o], dbConnection)
+		# convert to bedfile
+		o = [("chr"+str(x['chr']), int(x['pos']-1), int(x['pos']), x['pval']) for x in functions.merge_lists(o, list(c), 'name')]
+		x = pybedtools.BedTool(o)
+		# get random filename
+		# fn = str(uuid.uuid4())
+		tf = tempfile.NamedTemporaryFile()
+		fn = tf.name
+		print fn
+		# write to bigbed
+		cmd = ["./bed/" + platform.system() + "/bedSort", x.fn, x.fn]
+		subprocess.call(cmd)
+		cmd = ["./bed/" + platform.system() + "/bedToBigBed", x.fn, "bed/hg19", fn]
+		subprocess.call(cmd)
+		# return file download
+		if format == "bigbed":
+			bites = open(fn, 'rb')
+			return send_file(io.BytesIO(bites.read()), attachment_filename=snp+".bb", mimetype="application/octet-stream")
+		elif format == "bed":
+			txt = open(x.fn, 'r')
+			return Response(txt.read(), mimetype="text/plain")
+		else:
+			abort(404)
 
 
 class AssocMetaGene(Resource):
@@ -184,6 +230,17 @@ class GetAttributeList(Resource):
 		return [x['name'] for x in out]
 
 
+class GetCohortList(Resource):
+	def __init__(self):
+		super(GetCohortList, self).__init__()
+
+	def get(self):	
+		out = functions.get_attribute_list(dbConnection, "cohort", "*")
+		if len(out) == 0:
+			abort(404)
+		return out
+
+
 
 class ComplexQuery(Resource):
 
@@ -205,7 +262,7 @@ class ComplexQuery(Resource):
 		args = self.reqparse.parse_args()
 		out = functions.complex_query(args, dbConnection)
 		print(out)
-		return out
+		return jsonify(out)
 
 
 ###
@@ -227,8 +284,10 @@ api.add_resource(AssocMetaSnp,
 	'/'+version+'/assoc_meta/snp/<snp>', endpoint='AssocMetaSnp')
 api.add_resource(AssocMetaCpg, 
 	'/'+version+'/assoc_meta/cpg/<cpg>', endpoint='AssocMetaCpg')
-api.add_resource(BigbedCpG, 
-	'/'+version+'/bigbed/cpg/<cpg>', endpoint='BigbedCpG')
+api.add_resource(BigbedCpg, 
+	'/'+version+'/dl/<format>/cpg/<cpg>', endpoint='BigbedCpg')
+api.add_resource(BigbedSnp, 
+	'/'+version+'/dl/<format>/snp/<snp>', endpoint='BigbedSnp')
 api.add_resource(AssocMetaGene, 
 	'/'+version+'/assoc_meta/gene/<attribute>/<gene>', endpoint='AssocMetaGene')
 api.add_resource(AssocMetaRange,
@@ -239,6 +298,8 @@ api.add_resource(InfoAttributeItem,
 	'/'+version+'/info/<attribute>/<item>', endpoint='InfoAttributeItem')
 api.add_resource(GetAttributeList,
 	'/'+version+'/list/<attribute>', endpoint='GetAttributeList')
+api.add_resource(GetCohortList,
+	'/'+version+'/cohorts', endpoint='GetCohortList')
 
 api.add_resource(ComplexQuery, '/'+version+'/query', endpoint='ComplexQuery')
 
