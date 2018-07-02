@@ -42,7 +42,7 @@ assoc_meta_fields = {
 	'pval_are': fields.Float,
 	'se_mre': fields.Float,
 	'pval_mre': fields.Float,
-	'chunk': fields.Integer
+	'clumped': fields.Boolean
 }
 
 
