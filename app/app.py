@@ -252,6 +252,7 @@ class ComplexQuery(Resource):
 		self.reqparse.add_argument('pval', type=float, default=0.05, location='json')
 		# self.reqparse.add_argument('cistrans', type=str, location='json')
 		self.reqparse.add_argument('cistrans', choices=('','cis','trans'), location='json')
+		self.reqparse.add_argument('clumped', choices=('','0','1'), location='json')
 		self.reqparse.add_argument('columns', type=str, location='json')
 		super(ComplexQuery, self).__init__()
 
@@ -261,7 +262,7 @@ class ComplexQuery(Resource):
 	def post(self):
 		args = self.reqparse.parse_args()
 		out = functions.complex_query(args, dbConnection)
-		print(out)
+		# print(out)
 		return jsonify(out)
 
 

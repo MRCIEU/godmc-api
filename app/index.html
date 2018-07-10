@@ -406,13 +406,15 @@ $(document).ready(function () {
     &quot;rsids&quot;: [&quot;rs6602381&quot;, &quot;rs72828459&quot;, &quot;rs234&quot;],
     &quot;cpgs&quot;: [&quot;cg14380065&quot;, &quot;cg12715136&quot;]
 }</code></pre>
-<p>As in the third example but set p-value threshold, only return cis effects, and specify which columns to return, <code>test.json</code>:</p>
+<p>As in the third example but set p-value threshold, only return cis effects, return only clumped rows, and specify which columns to return, <code>test.json</code>:</p>
 <pre class="json"><code>{
-    &quot;cpgs&quot;: [&quot;cg14380065&quot;, &quot;cg12715136&quot;],
+    &quot;cpgs&quot;: [&quot;cg02518338&quot;, &quot;cg12715136&quot;],
     &quot;pval&quot;: 1e-10,
     &quot;cistrans&quot;: &quot;cis&quot;,
-    &quot;columns&quot;: &quot;pval, cpg, cistrans&quot;
+    &quot;clumped&quot;: 1,
+    &quot;columns&quot;: &quot;pval, cpg, cistrans, clumped&quot;
 }</code></pre>
+<p>Note that if the <code>clumped</code> and <code>cistrans</code> fields are not set then no filtering is done. If <code>clumped = 0</code> then only the unclumped results are returned. If <code>cistrans = &quot;&quot;</code> then both cis and trans results are returned. Similarly, if the <code>pval</code> field is not set then no filter is applied.</p>
 </section>
 
 

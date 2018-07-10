@@ -157,13 +157,17 @@ Query mQTLs for rsids and CpGs, (i.e. get all results where an mQTL contains a S
 }
 ```
 
-As in the third example but set p-value threshold, only return cis effects, and specify which columns to return, `test.json`:
+As in the third example but set p-value threshold, only return cis effects, return only clumped rows, and specify which columns to return, `test.json`:
 
 ```json
 {
-    "cpgs": ["cg14380065", "cg12715136"],
+    "cpgs": ["cg02518338", "cg12715136"],
     "pval": 1e-10,
     "cistrans": "cis",
-    "columns": "pval, cpg, cistrans"
+    "clumped": 1,
+    "columns": "pval, cpg, cistrans, clumped"
 }
 ```
+
+Note that if the `clumped` and `cistrans` fields are not set then no filtering is done. If `clumped = 0` then only the unclumped results are returned. If `cistrans = ""` then both cis and trans results are returned. Similarly, if the `pval` field is not set then no filter is applied.
+
