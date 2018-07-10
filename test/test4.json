@@ -1,7 +1,8 @@
 {
-	"cpgs": ["cg14380065", "cg12715136"],
+	"cpgs": ["cg02518338", "cg12715136"],
 	"pval": 1e-10,
 	"cistrans": "cis",
-	"columns": "pval, cpg, cistrans"
+	"columns": "pval, cpg, cistrans, clumped",
+	"clumped": 1
 }
 

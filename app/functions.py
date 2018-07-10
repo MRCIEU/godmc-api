@@ -220,7 +220,7 @@ def complex_query(args, dbConnection):
 
 	print(args)
 	if not args['pval']:
-		pval = 0.05
+		pval = 1
 	else:
 		pval = args['pval']
 
@@ -230,9 +230,25 @@ def complex_query(args, dbConnection):
 		cistrans = 'AND a.cistrans = 0'
 	elif args['cistrans'] == 'trans':
 		cistrans = 'AND a.cistrans = 1'
+	elif args['cistrans'] == '':
+		cistrans = ''
 	else:
 		print( "cistrans problem")
 		return ()
+
+	if not args['clumped']:
+		clumped = ''
+	elif args['clumped'] == '0':
+		clumped = 'AND a.clumped = 0'
+	elif args['clumped'] == '1':
+		clumped = 'AND a.clumped = 1'
+	elif args['clumped'] == '':
+		clumped = ''
+	else:
+		print( "clumped problem")
+		return ()
+
+	# print(clumped)
 
 	if not args['columns']:
 		cols = 'a.*'
@@ -258,7 +274,8 @@ def complex_query(args, dbConnection):
 			AND a.cpg IN ({1})
 			AND a.pval < {2}
 			{3}
-			ORDER BY a.pval""".format(cols, cpgs, pval, cistrans)
+			{4}
+			ORDER BY a.pval""".format(cols, cpgs, pval, cistrans, clumped)
 
 
 	if args['snps'] and not args['cpgs']:
@@ -268,7 +285,8 @@ def complex_query(args, dbConnection):
 			AND a.snp IN ({1})
 			AND a.pval < {2}
 			{3}
-			ORDER BY a.pval""".format(cols, snps, pval, cistrans)
+			{4}
+			ORDER BY a.pval""".format(cols, snps, pval, cistrans, clumped)
 
 	if args['snps'] and args['cpgs']:
 		SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM
@@ -278,7 +296,8 @@ def complex_query(args, dbConnection):
 			AND a.cpg IN ({2})
 			AND a.pval < {3}
 			{4}
-			ORDER BY a.pval""".format(cols, snps, cpgs, pval, cistrans)
+			{5}
+			ORDER BY a.pval""".format(cols, snps, cpgs, pval, cistrans, clumped)
 
 	if args['rsids'] and not args['cpgs']:
 		SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM
@@ -287,7 +306,8 @@ def complex_query(args, dbConnection):
 			AND b.rsid IN ({1})
 			AND a.pval < {2}
 			{3}
-			ORDER BY a.pval""".format(cols, rsids, pval, cistrans)
+			{4}
+			ORDER BY a.pval""".format(cols, rsids, pval, cistrans, clumped)
 
 	if args['rsids'] and args['cpgs']:
 		SQL = """SELECT {0}, b.name, b.rsid, b.allele1 AS a1, b.allele2 AS a2 FROM
@@ -297,7 +317,8 @@ def complex_query(args, dbConnection):
 			AND a.cpg IN ({2})
 			AND a.pval < {3}
 			{4}
-			ORDER BY a.pval""".format(cols, rsids, cpgs, pval, cistrans)
+			{5}
+			ORDER BY a.pval""".format(cols, rsids, cpgs, pval, cistrans, clumped)
 
 	query = PySQLPool.getNewQuery(dbConnection)
 	query.Query(SQL)
