@@ -3,6 +3,6 @@
 	"pval": 1e-10,
 	"cistrans": "cis",
 	"columns": "pval, cpg, cistrans, clumped",
-	"clumped": 1
+	"clumped": ""
 }
 
