@@ -143,10 +143,10 @@ class BigbedSnp(Resource):
 		# return file download
 		if format == "bigbed":
 			bites = open(fn, 'rb')
-			return send_file(io.BytesIO(bites.read()), attachment_filename=snp+".bb", mimetype="application/octet-stream")
+			return send_file(io.BytesIO(bites.read()), attachment_filename=snp+".bb")
 		elif format == "bed":
 			txt = open(x.fn, 'r')
-			return Response(txt.read(), mimetype="text/plain")
+			return Response(txt.read())
 		else:
 			abort(404)
 
