@@ -94,7 +94,7 @@ class BigbedCpg(Resource):
 			o.append((p[0], int(p[1])-1, int(p[1]), str(-math.log(max(1e-100, x['pval'])))))
 		x = pybedtools.BedTool(o)
 		# get random filename
-		# fn = str(uuid.uuid4())
+		# fn = str(uuid.uuid4())+".bb"
 		tf = tempfile.NamedTemporaryFile()
 		fn = tf.name
 		print fn
@@ -106,10 +106,18 @@ class BigbedCpg(Resource):
 		# return file download
 		if format == "bigbed":
 			bites = open(fn, 'rb')
-			return send_file(io.BytesIO(bites.read()), attachment_filename=cpg+".bb")
+			return send_file(io.BytesIO(bites.read()), as_attachment=True, attachment_filename=cpg+".bb")
+			# rv = Response(io.BytesIO(bites.read()), 206, direct_passthrough=True)
+			# rv.headers.add('Accept-Ranges', 'bytes')
+			# rv.headers.add('Accept-Control-Allow-Origin', '*')
+			# rv.headers.add('Accept-Control-Allow-Headers', 'Range')
+			# rv.headers.add('Accept-Control-Max-Age', '7200')
+			# rv.headers.add('Connection', 'keep-alive')
+			# return rv
+
 		elif format == "bed":
 			txt = open(x.fn, 'r')
-			return Response(txt.read())
+			return Response(txt.read(), mimetype="text/plain")
 		else:
 			abort(404)
 
@@ -143,10 +151,10 @@ class BigbedSnp(Resource):
 		# return file download
 		if format == "bigbed":
 			bites = open(fn, 'rb')
-			return send_file(io.BytesIO(bites.read()), attachment_filename=snp+".bb")
+			return send_file(io.BytesIO(bites.read()), as_attachment=True, attachment_filename=snp+".bb")
 		elif format == "bed":
 			txt = open(x.fn, 'r')
-			return Response(txt.read())
+			return Response(txt.read(), mimetype="text/plain")
 		else:
 			abort(404)
 
