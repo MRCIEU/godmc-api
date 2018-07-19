@@ -91,7 +91,7 @@ class BigbedCpg(Resource):
 		o = []
 		for x in dat:
 			p = x['name'].split(":")
-			o.append((p[0], int(p[1])-1, int(p[1]), str(-math.log(max(1e-100, x['pval'])))))
+			o.append((p[0], int(p[1])-1, int(p[1]), x['rsid'], str(-math.log(max(1e-100, x['pval'])))))
 		x = pybedtools.BedTool(o)
 		# get random filename
 		# fn = str(uuid.uuid4())+".bb"
@@ -136,7 +136,7 @@ class BigbedSnp(Resource):
 
 		c = functions.get_attribute_item("cpg", [b['name'] for b in o], dbConnection)
 		# convert to bedfile
-		o = [("chr"+str(x['chr']), int(x['pos']-1), int(x['pos']), x['pval']) for x in functions.merge_lists(o, list(c), 'name')]
+		o = [("chr"+str(x['chr']), int(x['pos']-1), int(x['pos']), x['name'], x['pval']) for x in functions.merge_lists(o, list(c), 'name')]
 		x = pybedtools.BedTool(o)
 		# get random filename
 		# fn = str(uuid.uuid4())
