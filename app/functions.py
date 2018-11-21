@@ -2,6 +2,7 @@ import json
 import PySQLPool
 import itertools
 
+
 def merge_lists(l1, l2, key):
 	merged = {}
 	for item in l1+l2:
