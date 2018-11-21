@@ -146,7 +146,7 @@ def query_assocmeta_gene_snp(gene, dbConnection, window=250000, columns="*", max
 		AND b.pos >= {2}
 		AND b.pos <= {3}
 		AND a.pval < {4}
-		ORDER BY a.pval""".format(cols, geneinfo['chr'], geneinfo['start_pos']-window, geneinfo['start_pos']+window, maxpval)
+		ORDER BY a.pval""".format(cols, geneinfo['chr'], geneinfo['start_pos']-window, geneinfo['stop_pos']+window, maxpval)
 
 	query = PySQLPool.getNewQuery(dbConnection)
 	query.Query(SQL)
@@ -168,7 +168,7 @@ def query_assocmeta_gene_cpg(gene, dbConnection, window=250000, columns="*", max
 		AND c.pos >= {2}
 		AND c.pos <= {3}
 		AND a.pval < {4}
-		ORDER BY a.pval""".format(cols, geneinfo['chr'], geneinfo['start_pos']-window, geneinfo['start_pos']+window, maxpval)
+		ORDER BY a.pval""".format(cols, geneinfo['chr'], geneinfo['start_pos']-window, geneinfo['stop_pos']+window, maxpval)
 
 	query = PySQLPool.getNewQuery(dbConnection)
 	query.Query(SQL)
