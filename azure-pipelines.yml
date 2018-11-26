@@ -9,7 +9,7 @@ jobs:
     inputs:
       versionSpec: '2.7'
       architecture: 'x64'
-  - script: sudo apt-get install mysql*
+  - script: sudo apt-get update  && sudo apt-get install mysql*
   - script: python -m pip install --upgrade pip && pip install -r app/requirements.txt
     displayName: 'Install dependencies'
   - script: |
