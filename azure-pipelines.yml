@@ -16,4 +16,5 @@ jobs:
       pip install pytest
       pytest app/test.py --doctest-modules --junitxml=junit/test-results.xml
     displayName: 'pytest'
+    workingDirectory: 'app/'
 
