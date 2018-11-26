@@ -14,7 +14,6 @@ jobs:
     displayName: 'Install dependencies'
   - script: |
       pip install pytest
-      pytest tests --doctest-modules --junitxml=junit/test-results.xml
+      pytest app/test.py --doctest-modules --junitxml=junit/test-results.xml
     displayName: 'pytest'
-  - script: python -m pytest app/test.py
-    displayName: 'Run tests'
+
