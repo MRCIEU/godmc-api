@@ -321,14 +321,15 @@ $(document).ready(function () {
 <li><a href="#get-a-list-of-all-genes">Get a list of all genes</a></li>
 <li><a href="#get-information-about-a-snp-cpg-or-gene">Get information about a SNP, CpG or gene</a></li>
 <li><a href="#more-complex-queries">More complex queries</a></li>
+<li><a href="#using-r">Using R</a></li>
 </ul>
 </div>
 
 <hr />
 <p>This is an API which is used to pull down results from the GoDMC meta analysis of genetic influences on DNA methylation levels.</p>
-<p>Most methods are using <code>get</code> - you put in a specific query and the result is returned</p>
-<p>There are also more complex queries that can be obtained using <code>post</code>. Here a json file needs to be built that describes the query</p>
-<p>All results are json format</p>
+<p>Most methods are using <code>get</code> - you put in a specific query and the result is returned.</p>
+<p>There are also more complex queries that can be obtained using <code>post</code>. Here a json file needs to be built that describes the query.</p>
+<p>All results are json format. At the bottom of this page we describe how you can use R to access the API.</p>
 <hr />
 <section id="get-a-list-of-all-cohorts" class="level2">
 <h2>Get a list of all cohorts</h2>
@@ -415,6 +416,32 @@ $(document).ready(function () {
     &quot;columns&quot;: &quot;pval, cpg, cistrans, clumped&quot;
 }</code></pre>
 <p>Note that if the <code>clumped</code> and <code>cistrans</code> fields are not set then no filtering is done. If <code>clumped = 0</code> then only the unclumped results are returned. If <code>cistrans = &quot;&quot;</code> then both cis and trans results are returned. Similarly, if the <code>pval</code> field is not set then no filter is applied.</p>
+<hr />
+</section>
+<section id="using-r" class="level2">
+<h2>Using R</h2>
+<p>You can access the data through <code>GET</code> methods, as demonstrated in the following example:</p>
+<pre class="r"><code>if(!require(jsonlite)){
+    install.packages(&quot;jsonlite&quot;)
+}
+library(jsonlite)
+mqtl_data &lt;- fromJSON(&quot;http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362&quot;)</code></pre>
+<p>i.e. you are just getting JSON downloads from the URL. You can also run more complex queries following the <code>POST</code> format:</p>
+<pre class="r"><code>if(!require(httr)){
+    install.packages(&quot;httr&quot;)
+}
+if(!require(dplyr)){
+    install.packages(&quot;dplyr&quot;)
+}
+library(httr)
+library(dplyr)
+query &lt;- list(
+    cpgs = c(&quot;cg02518338&quot;, &quot;cg12715136&quot;),
+    pval = 1e-10,
+    clumped = 1
+)
+res &lt;- POST(&quot;http://api.godmc.org.uk/v0.1/query&quot;, body = query, encode = &quot;json&quot;)
+content(res) %&gt;% lapply(., as_data_frame) %&gt;% bind_rows</code></pre>
 </section>
 
 

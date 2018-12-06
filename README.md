@@ -10,11 +10,11 @@ output:
 
 This is an API which is used to pull down results from the GoDMC meta analysis of genetic influences on DNA methylation levels. 
 
-Most methods are using `get` - you put in a specific query and the result is returned
+Most methods are using `get` - you put in a specific query and the result is returned.
 
-There are also more complex queries that can be obtained using `post`. Here a json file needs to be built that describes the query
+There are also more complex queries that can be obtained using `post`. Here a json file needs to be built that describes the query.
 
-All results are json format
+All results are json format. At the bottom of this page we describe how you can use R to access the API.
 
 ---
 
@@ -170,4 +170,38 @@ As in the third example but set p-value threshold, only return cis effects, retu
 ```
 
 Note that if the `clumped` and `cistrans` fields are not set then no filtering is done. If `clumped = 0` then only the unclumped results are returned. If `cistrans = ""` then both cis and trans results are returned. Similarly, if the `pval` field is not set then no filter is applied.
+
+---
+
+## Using R
+
+You can access the data through `GET` methods, as demonstrated in the following example:
+
+```r
+if(!require(jsonlite)){
+    install.packages("jsonlite")
+}
+library(jsonlite)
+mqtl_data <- fromJSON("http://api.godmc.org.uk/v0.1/assoc_meta/cpg/cg17242362")
+```
+
+i.e. you are just getting JSON downloads from the URL. You can also run more complex queries following the `POST` format:
+
+```r
+if(!require(httr)){
+    install.packages("httr")
+}
+if(!require(dplyr)){
+    install.packages("dplyr")
+}
+library(httr)
+library(dplyr)
+query <- list(
+    cpgs = c("cg02518338", "cg12715136"),
+    pval = 1e-10,
+    clumped = 1
+)
+res <- POST("http://api.godmc.org.uk/v0.1/query", body = query, encode = "json")
+content(res) %>% lapply(., as_data_frame) %>% bind_rows
+```
 
