@@ -228,9 +228,9 @@ def complex_query(args, dbConnection):
 	if not args['cistrans']:
 		cistrans = ''
 	elif args['cistrans'] == 'cis':
-		cistrans = 'AND a.cistrans = 0'
-	elif args['cistrans'] == 'trans':
 		cistrans = 'AND a.cistrans = 1'
+	elif args['cistrans'] == 'trans':
+		cistrans = 'AND a.cistrans = 0'
 	elif args['cistrans'] == '':
 		cistrans = ''
 	else:
