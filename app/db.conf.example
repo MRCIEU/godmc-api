@@ -1,7 +1,7 @@
 {
-        "user": "USER",
-        "passwd": "PASSWORD",
-        "host": "HOST",
-        "port":1111,
-        "db": "DB"
+        "user": "root",
+        "passwd": "qnwNQ6wBW",
+        "host": "db",
+        "port":3306,
+        "db": "godmc"
 }
